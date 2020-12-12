@@ -1,5 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
+import csv
 
 URL = "http://books.toscrape.com/catalogue/sharp-objects_997/index.html"
 base_url = "http://books.toscrape.com/"
@@ -27,22 +28,19 @@ def get_book_info(url):
 	for p in review_rating:
 		p.get("class")
 		review_rating = p.get("class")
-	print(review_rating[1])
+	book["review_rating"] = review_rating[1]
 
 	image_url = soup.find("article", "product_page").img["src"]
 	book["image_url"] = image_url.replace("../../", base_url)
-	
-	
-	
-	# print(universal_product_code)
-	# print(description)
-	# print(price_excluding_tax)
-	# print(price_including_tax)
-	# print(number_available)
-	# print(price_excluding_tax)
-	# print(price_including_tax)
-	# print(number_available)
+
 	return book
 
-
-	
+def create_csv(book):
+	book_csv = [book]
+	csv_columns = list(book.keys())
+	csv_file = "book.csv"
+	with open(csv_file, 'w') as csvfile:
+		writer = csv.DictWriter(csvfile, fieldnames=csv_columns)
+		writer.writeheader()
+		for data in book_csv:
+			writer.writerow(data)
