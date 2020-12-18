@@ -21,14 +21,12 @@ def get_book_info(url):
 	book['price_including_tax'] = rows[3].td.text
 	book['price_excluding_tax'] = rows[2].td.text
 	book['number_available'] = rows[5].td.text	
+	book['description'] = soup.find('article', 'product_page').find_all('p', recursive=False)[0].text
 	book['category'] = soup.ul.find_all('a')[-1].text
 
-	review_rating = soup.find('article', 'product_page').find('div', 'row').find_all('p')
-	for p in review_rating:
-		p.get('class')
-		review_rating = p.get('class')
-	book['review_rating'] = review_rating[1]
-
+	review_rating = soup.find('p', {'class': 'star-rating'})['class']
+	ratings_dict = {'One': 1, 'Two': 2, 'Three': 3, 'Four': 4, 'Five': 5}
+	book['review_rating'] = str(ratings_dict[review_rating[1]]) + '/5'
 
 	image_url = soup.find('article', 'product_page').img['src']
 	book['image_url'] = image_url.replace('../../', base_url)
