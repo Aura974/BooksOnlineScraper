@@ -35,7 +35,10 @@ def get_book_info(url):
 
 def create_csv(book):
 	csv_file = 'book_info.csv'
-	with open(csv_file, 'w', newline = '') as csvfile:
+	with open(csv_file, 'a+', newline = '') as csvfile:
 		writer = csv.DictWriter(csvfile, fieldnames=book.keys())
-		writer.writeheader()
+
+		if csvfile.tell() == 0:
+			writer.writeheader()
+
 		writer.writerow(book)
