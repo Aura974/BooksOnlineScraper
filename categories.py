@@ -39,5 +39,4 @@ def get_category_url(url_category):
                 
             except:
                 break
-    print(len(category))
-   
+    return category          

@@ -2,7 +2,6 @@ import requests
 from bs4 import BeautifulSoup
 import csv
 
-url = 'http://books.toscrape.com/catalogue/sharp-objects_997/index.html'
 base_url = 'http://books.toscrape.com/'
 
 def get_book_info(url):
@@ -26,7 +25,7 @@ def get_book_info(url):
 
 	review_rating = soup.find('p', {'class': 'star-rating'})['class']
 	ratings_dict = {'One': 1, 'Two': 2, 'Three': 3, 'Four': 4, 'Five': 5}
-	book['review_rating'] = str(ratings_dict[review_rating[1]]) + '/5'
+	book['review_rating'] = str(ratings_dict[review_rating[1]])
 
 	image_url = soup.find('article', 'product_page').img['src']
 	book['image_url'] = image_url.replace('../../', base_url)

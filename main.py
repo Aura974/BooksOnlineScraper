@@ -1,13 +1,19 @@
-import P2
+import book_info
 import categories
 
-URL = "http://books.toscrape.com/catalogue/sharp-objects_997/index.html"
-URL_category = "http://books.toscrape.com/catalogue/category/books/fantasy_19/index.html"
+url_category = 'http://books.toscrape.com/catalogue/category/books/fantasy_19/index.html'
 
 if __name__ == '__main__':
-	book = P2.get_book_info(URL)
-	P2.create_csv(book)
-	categories.get_category_url(URL_category)
+		
+	url_category = categories.get_category_url(url_category)
 
+	for url in url_category:
+		book = book_info.get_book_info(url)
+		book_info.create_csv(book)
+
+
+
+
+	
 
 
