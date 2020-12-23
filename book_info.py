@@ -2,11 +2,11 @@ import requests
 from bs4 import BeautifulSoup
 import csv
 
-URL = 'http://books.toscrape.com/catalogue/sharp-objects_997/index.html'
+url = 'http://books.toscrape.com/catalogue/sharp-objects_997/index.html'
 base_url = 'http://books.toscrape.com/'
 
 def get_book_info(url):
-	page = requests.get(URL)
+	page = requests.get(url)
 	book = dict()
 	review = []
 
