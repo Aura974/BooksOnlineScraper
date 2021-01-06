@@ -7,7 +7,6 @@ base_url = 'http://books.toscrape.com/'
 def get_book_info(url):
 	page = requests.get(url)
 	book = dict()
-	review = []
 
 	soup = BeautifulSoup(page.content, 'html.parser')
 

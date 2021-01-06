@@ -1,16 +1,24 @@
-import book_info
-import categories
+import book_info as bkinfo
+import categories as cat
 
-url_category = 'http://books.toscrape.com/catalogue/category/books/fantasy_19/index.html'
+base_url = 'http://books.toscrape.com/'
 
 if __name__ == '__main__':
 		
-	url_category = categories.get_category_url(url_category)
-
+	url_category = cat.url_category(base_url)
 	for url in url_category:
-		book = book_info.get_book_info(url)
-		book_info.create_csv(book)
+		book_category = cat.get_category_url(url)
+		
+		for book in book_category:
+			book = bkinfo.get_book_info(book)
+			bkinfo.create_csv(book)
 
+
+		
+
+	
+	
+		
 
 
 

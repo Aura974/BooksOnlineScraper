@@ -1,10 +1,23 @@
 import requests
 from bs4 import BeautifulSoup
 
-url_category = 'http://books.toscrape.com/catalogue/category/books/fantasy_19/index.html'
 base_url = 'http://books.toscrape.com/'
 
+def url_category(base_url):
+    page = requests.get(base_url)
+    url_category = []
+    
+    soup = BeautifulSoup(page.text, 'html.parser')
+    category = soup.find('aside').find_all('a')
+    
+    for cat in category:
+        link = cat.get('href')
+        url_category.append(base_url + link)
+    del url_category[0]
+    return url_category
+
 def nb_of_pages(url_category):
+    # gives the number of pages in one category
     nb_of_pages = []
     page = requests.get(url_category)
     soup = BeautifulSoup(page.text, 'html.parser')
@@ -13,13 +26,10 @@ def nb_of_pages(url_category):
         nb_of_pages.append(i)
     nb_of_pages = (len(nb_of_pages))
     return nb_of_pages
-    
-    
-
+     
 def get_category_url(url_category):
     category = []
-    pattern = 'http://books.toscrape.com/catalogue/category/books/fantasy_19/'
-    url_category = url_category.replace('index', 'page-1')
+    pattern = url_category.replace('index.html', '')
     for i in range(nb_of_pages(url_category)):
         page = requests.get(url_category)
         if page.ok:
@@ -40,3 +50,7 @@ def get_category_url(url_category):
             except:
                 break
     return category          
+
+
+        
+
