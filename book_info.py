@@ -1,8 +1,11 @@
 import requests
 from bs4 import BeautifulSoup
 import csv
+from pathlib import Path
 
 base_url = 'http://books.toscrape.com/'
+path = Path.cwd()
+home = Path.home()
 
 def get_book_info(url):
 	page = requests.get(url)
@@ -32,11 +35,14 @@ def get_book_info(url):
 	return book
 
 def create_csv(book):
-	csv_file = 'book_info.csv'
-	with open(csv_file, 'a+', newline = '') as csvfile:
+	Path(path, 'data').mkdir(exist_ok=True)
+	Path(path, 'data', 'book_info.csv').touch()
+	csv_file = Path(path, 'data', 'book_info.csv')
+	empty = Path(csv_file).stat().st_size == 0
+	with Path(csv_file).open('a+', newline = '', encoding='utf-8') as csvfile:
 		writer = csv.DictWriter(csvfile, fieldnames=book.keys())
 
-		if csvfile.tell() == 0:
+		if empty:
 			writer.writeheader()
 
 		writer.writerow(book)
