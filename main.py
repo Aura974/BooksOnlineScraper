@@ -12,6 +12,7 @@ if __name__ == '__main__':
 		for book in book_category:
 			book = bkinfo.get_book_info(book)
 			bkinfo.create_csv(book)
+			bkinfo.images(book)
 
 		
 

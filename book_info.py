@@ -2,6 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 import csv
 from pathlib import Path
+import urllib.request
 
 base_url = 'http://books.toscrape.com/'
 path = Path.cwd()
@@ -56,3 +57,9 @@ def create_csv(book):
 			writer.writeheader()
 
 		writer.writerow(book)
+
+def images(book):
+	UPC = book['universal_product_code']
+	image_url = book['image_url']
+	Path(path, 'data', 'images').mkdir(exist_ok=True)
+	urllib.request.urlretrieve(image_url, Path(path, 'data', 'images', UPC + '.jpeg'))
