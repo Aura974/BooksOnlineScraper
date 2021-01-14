@@ -22,7 +22,16 @@ def get_book_info(url):
 	book['price_including_tax'] = rows[3].td.text
 	book['price_excluding_tax'] = rows[2].td.text
 	book['number_available'] = rows[5].td.text	
-	book['description'] = soup.find('article', 'product_page').find_all('p', recursive=False)[0].text
+	
+	
+	
+	try:
+		description = soup.find('article', 'product_page').find_all('p', recursive=False)[0].text 
+		book['description'] = description
+	except:
+		book['description'] = "None"
+	
+	
 	book['category'] = soup.ul.find_all('a')[-1].text
 
 	review_rating = soup.find('p', {'class': 'star-rating'})['class']
@@ -35,14 +44,15 @@ def get_book_info(url):
 	return book
 
 def create_csv(book):
+	category = book['category']
 	Path(path, 'data').mkdir(exist_ok=True)
-	Path(path, 'data', 'book_info.csv').touch()
-	csv_file = Path(path, 'data', 'book_info.csv')
-	empty = Path(csv_file).stat().st_size == 0
-	with Path(csv_file).open('a+', newline = '', encoding='utf-8') as csvfile:
+	Path(path, 'data', category).mkdir(exist_ok=True)
+	file = f'{category}.csv' 
+	csv_file = Path(path, 'data', category, file)
+	with csv_file.open('a+', newline = '', encoding='utf-8') as csvfile:
 		writer = csv.DictWriter(csvfile, fieldnames=book.keys())
 
-		if empty:
+		if csv_file.stat().st_size == 0:
 			writer.writeheader()
 
 		writer.writerow(book)
