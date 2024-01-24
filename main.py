@@ -1,9 +1,9 @@
-import book_scraper as bk
-import csv_manager as csvmng
+# import book_scraper as bk
+# import csv_manager as csvmng
 import category_scraper as cat
 
 
-url = "https://books.toscrape.com/catalogue/category/books/sequential-art_5/index.html"
+url = "https://books.toscrape.com/catalogue/category/books/nonfiction_13/index.html"
 
 if __name__ == "__main__":
 

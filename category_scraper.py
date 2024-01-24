@@ -6,27 +6,27 @@ BASE_URL = "https://books.toscrape.com"
 
 def get_category_urls(url):
 
-    # set the category_url to current url
-    category_url, categories = url, []
+    # Use Session() to reuse the same connection
+    with requests.Session() as session:
+        # set the category_url to current url
+        category_url, categories = url, []
 
-    while category_url:
-        # Parse the html to retrieve data
-        page = requests.get(category_url)
-        soup = bs(page.content, "html.parser")
+        while category_url:
+            # Parse the html to retrieve data
+            page = session.get(category_url)
+            soup = bs(page.content, "html.parser")
 
-        # Retrieve the truncated urls
-        partial_urls = [a["href"] for a in soup.select("h3 a")]
+            # Retrieve the urls, reconstruct them and add to list
+            base_url = BASE_URL + "/catalogue"
+            categories.extend([base_url + part.get("href")[8:] for part in soup.select("h3 a")])
 
-        # Reconstruct the urls and add to list
-        categories.extend([BASE_URL + "/catalogue" + part[8:] for part in partial_urls])
+            # Find the next page link
+            next_page = soup.select_one("li.next a")
 
-        # Find the next page link
-        next_page = soup.select_one("li.next a")
+            # Update category_url accordingly
+            if next_page:
+                category_url = f"{url.rsplit("/", 1)[0]}/{next_page["href"]}"
+            else:
+                category_url = None
 
-        # Update category_url accordingly
-        if next_page:
-            category_url = url.replace("index", next_page["href"][:-5])
-        else:
-            category_url = None
-
-    return categories
+    return len(categories)
