@@ -29,4 +29,4 @@ def get_category_urls(url):
             else:
                 category_url = None
 
-    return len(categories)
+    return categories

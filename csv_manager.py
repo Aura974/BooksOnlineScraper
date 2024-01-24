@@ -2,10 +2,19 @@ from pathlib import Path
 import csv
 
 
-def create_csv(book):
+def get_upcs(csv_file):
 
-    # Store upc code
-    upc = book["universal_product_code"]
+    # Check if file is empty
+    if not csv_file.exists() or csv_file.stat().st_size == 0:
+        return set()
+
+    # Get a set of all existing upcs
+    with open(csv_file, "r", newline="", encoding="utf-8") as file:
+        reader = csv.DictReader(file)
+        return {row["universal_product_code"] for row in reader}
+
+
+def create_csv(books):
 
     # Create the data folder and file paths
     data_folder = Path.cwd() / "data"
@@ -14,24 +23,18 @@ def create_csv(book):
     # Check if data folder exists
     data_folder.mkdir(exist_ok=True)
 
-    # Open the file in a+ mode
-    with open(csv_file, "a+", newline="", encoding="utf-8") as file:
+    # Load existing UPCs
+    existing_upcs = get_upcs(csv_file)
 
-        # Move to the beginning of the file
-        file.seek(0)
+    # Open the file in append mode only
+    with open(csv_file, "a", newline="", encoding="utf-8") as file:
+        writer = csv.DictWriter(file, fieldnames=books[0].keys())
 
-        # Read the file
-        reader = csv.DictReader(file)
-        writer = csv.DictWriter(file, fieldnames=book.keys())
-
-        # Check if file is empty
-        if not reader.fieldnames:
-            # and write header
+        # Write header if file is empty
+        if not existing_upcs:
             writer.writeheader()
 
-        # Check if upc in file
-        if upc not in [row["universal_product_code"] for row in reader]:
-            # Move to the end of the file
-            file.seek(0, 2)
-            # and write data
-            writer.writerow(book)
+        # Write data only if upc not in file
+        for book in books:
+            if book["universal_product_code"] not in existing_upcs:
+                writer.writerow(book)
