@@ -14,11 +14,14 @@ def get_upcs(csv_file):
         return {row["universal_product_code"] for row in reader}
 
 
-def create_csv(books):
+def create_csv(book):
+
+    # Get category name
+    category = book["category"]
 
     # Create the data folder and file paths
     data_folder = Path.cwd() / "data"
-    csv_file = data_folder / "books_data.csv"
+    csv_file = data_folder / f"{category}.csv"
 
     # Check if data folder exists
     data_folder.mkdir(exist_ok=True)
@@ -28,13 +31,12 @@ def create_csv(books):
 
     # Open the file in append mode only
     with open(csv_file, "a", newline="", encoding="utf-8") as file:
-        writer = csv.DictWriter(file, fieldnames=books[0].keys())
+        writer = csv.DictWriter(file, fieldnames=book.keys())
 
         # Write header if file is empty
         if not existing_upcs:
             writer.writeheader()
 
         # Write data only if upc not in file
-        for book in books:
-            if book["universal_product_code"] not in existing_upcs:
-                writer.writerow(book)
+        if book["universal_product_code"] not in existing_upcs:
+            writer.writerow(book)
