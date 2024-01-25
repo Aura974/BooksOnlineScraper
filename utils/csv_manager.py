@@ -21,10 +21,12 @@ def create_csv(book):
 
     # Create the data folder and file paths
     data_folder = Path.cwd() / "data"
-    csv_file = data_folder / f"{category}.csv"
+    category_folder = data_folder / category
+    csv_file = category_folder / f"{category}.csv"
 
     # Check if data folder exists
     data_folder.mkdir(exist_ok=True)
+    category_folder.mkdir(exist_ok=True)
 
     # Load existing UPCs
     existing_upcs = get_upcs(csv_file)
