@@ -23,16 +23,16 @@ This web scraper is designed to extract detailed information about books from [B
 1. **Clone the repository** (or download the source code).
 
     ```bash
-    git clone https://github.com/Aura974/    BooksOnlineScraper.git
+    git clone https://github.com/Aura974/BooksOnlineScraper.git
     cd your_project
     ```
 
 2. **Set Up a Python Virtual Environment** (optional but recommended):
 
     ```bash
-    python -m venv env
+    py -m venv env
     .\env\Scripts\activate.bat  # On Windows
-    source venv/bin/activate  # On Unix or MacOS
+    source env/bin/activate  # On Unix or MacOS
     ```
 
 3. **Install required Python packages**:
@@ -56,7 +56,7 @@ The app starts by fetching URLs for all book categories from the home page.
 For each category, it scrapes data for each book, including its title, price, UPC, and other relevant details.
 
 3. **Data Organization**:
-Each book's data is saved in a CSV file named after its category. These files are stored in the **data/[category name]** directories.
+Each book's data is saved in a CSV file named after its category. These files are stored in the **data/\<category name\>** directories.
 
 4. **Image Downloading**:
 The cover images of the books are downloaded and saved in the folders corresponding to their categories within the data directory.
